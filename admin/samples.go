@@ -1,5 +1,6 @@
 package admin
 
+// SampleClasses is sample class data for mocking database
 var SampleClasses = map[string]*Class{
 	"C1": &Class{
 		Id:       "C1",
@@ -22,6 +23,7 @@ var SampleClasses = map[string]*Class{
 	},
 }
 
+// SampleSubjects is sample subjects data for mocking database
 var SampleSubjects = map[string]*Subject{
 	"English": &Subject{
 		Name:       "English",
@@ -37,6 +39,7 @@ var SampleSubjects = map[string]*Subject{
 	},
 }
 
+// SampleStudents is sample students data for mocking database
 var SampleStudents = map[string]*Student{
 	"S1": &Student{
 		Id:    "S1",

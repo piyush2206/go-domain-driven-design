@@ -2,6 +2,7 @@ package report
 
 import "github.com/piyush2206/go-domain-driven-design/admin"
 
+// SampleReports is sample reports data
 var SampleReports = map[string]*report{
 	"S1": &report{
 		student: admin.SampleStudents["S1"],

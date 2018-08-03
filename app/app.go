@@ -1,3 +1,6 @@
+// app package is responible for initialising
+// all the external dependencies and their mocking
+
 package app
 
 type (
@@ -7,7 +10,7 @@ type (
 	}
 )
 
-// Run etablishes connections to multiple external dependency of the project
+// Init etablishes connections to multiple external dependency of the project
 // and returns them in a single context object
 func Init() (ctx *AppCtx, err error) {
 	ctx = &AppCtx{}

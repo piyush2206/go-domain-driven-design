@@ -7,11 +7,14 @@ import (
 )
 
 type (
+	// ClassService implements class service interface of grpc
 	ClassService struct {
 		err error
 	}
 )
 
+// Class is the handler of grpc endpoint 'Class'
+// It returns class info of the requested classId
 func (cs *ClassService) Class(ctx context.Context, req *ReqClass) (*ResClass, error) {
 	cls, _ := SampleClasses[req.ClassId]
 
@@ -34,6 +37,8 @@ func (cs *ClassService) Class(ctx context.Context, req *ReqClass) (*ResClass, er
 	return resCls, nil
 }
 
+// Create is the handler of grpc endpoint 'Create'
+// It creates a class record in database with the passed request payload
 func (cs *ClassService) Create(ctx context.Context, req *ReqClassCreate) (*ResSuccess, error) {
 	res := new(ResSuccess)
 	class := new(Class)
