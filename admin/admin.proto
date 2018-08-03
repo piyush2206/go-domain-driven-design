@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+package admin;
+
+import "google/api/annotations.proto";
+
+service Class {
+    rpc Class(ReqClass) returns (ResClass) {
+        option (google.api.http) = {
+            get: "/admin/class",
+        };
+    }
+
+    rpc Create(ReqClassCreate) returns (ResSuccess) {
+        option (google.api.http) = {
+            post: "/admin/class",
+            body: "*",
+        };
+    }
+}
+
+service Student {
+    rpc Student(ReqStudent) returns (ResStudent) {
+        option (google.api.http) = {
+            get: "/admin/student",
+        };
+    }
+}
+
+message ReqClassCreate {
+    string id = 1;
+    string standard = 2;
+    string division = 3;
+}
+
+message ResSuccess {
+    bool success = 1;
+    string msg = 2;
+}
+
+message ClassInfo {
+    string standard = 1;
+    string division = 2;
+}
+
+message ReqClass {
+    string classId = 1;
+}
+
+message ResClass {
+    ClassInfo class = 1;
+    repeated StudentInfo students = 2;
+}
+
+message StudentInfo {
+    string name = 1;
+    int32 age = 2;
+}
+
+message ReqStudent {
+    string studentId = 1;
+}
+
+message ResStudent {
+    StudentInfo student = 1;
+    ClassInfo class = 2;
+}

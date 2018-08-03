@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package report;
+
+import "github.com/piyush2206/go-domain-driven-design/admin/admin.proto";
+import "google/api/annotations.proto";
+
+service Report {
+    rpc Report(ReqReportStudent) returns (ResReportStudent) {
+        option (google.api.http) = {
+            get: "/reports",
+        };
+    }
+}
+
+message ReqReportStudent {
+    string classId = 1;
+    string studentId = 2;
+}
+
+message ResReportStudent {
+    admin.ClassInfo class = 1;
+    repeated StudentReport report = 2;
+}
+
+message StudentReport {
+    admin.StudentInfo studentInfo = 1;
+    double grandTotal = 3;
+    double grandTotalMarks = 4;
+    double percent = 5;
+}
+
