@@ -10,6 +10,7 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/piyush2206/go-domain-driven-design/admin"
 	"github.com/piyush2206/go-domain-driven-design/report"
+	"go.uber.org/fx"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
@@ -19,7 +20,18 @@ const (
 	httpPort = "8080"
 )
 
+var gRPCFxModule = fx.Options(
+	fx.Provide(
+		grpc.NewServer,
+	),
+	fx.Invoke(
+		runGRPC,
+	),
+)
+
 func runGRPC(s *grpc.Server) {
+	go startGRPCGateway()
+
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", grpcPort))
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
@@ -32,10 +44,10 @@ func runGRPC(s *grpc.Server) {
 	}
 }
 
-func startGRPCGateway() (*string, error) {
+func startGRPCGateway() error {
 	ctx := context.Background()
-	ctx, cancel := context.WithCancel(ctx)
-	defer cancel()
+	// ctx, cancel := context.WithCancel(ctx)
+	// defer cancel()
 
 	mux := runtime.NewServeMux()
 	opts := []grpc.DialOption{grpc.WithInsecure()}
@@ -49,9 +61,9 @@ func startGRPCGateway() (*string, error) {
 		report.RegisterReportHandlerFromEndpoint,
 	} {
 		if err := f(ctx, mux, grpcAddr, opts); err != nil {
-			return nil, err
+			return err
 		}
 	}
 
-	return nil, http.ListenAndServe(fmt.Sprintf(":%s", httpPort), mux)
+	return http.ListenAndServe(fmt.Sprintf(":%s", httpPort), mux)
 }

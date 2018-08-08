@@ -6,6 +6,7 @@ import (
 	"math"
 
 	"github.com/piyush2206/go-domain-driven-design/admin"
+	"go.uber.org/fx"
 )
 
 type (
@@ -23,6 +24,15 @@ type (
 		class          *admin.Class
 		reportSubjects []reportSubject
 	}
+)
+
+var FxModule = fx.Options(
+	fx.Provide(
+		NewReportService,
+	),
+	fx.Invoke(
+		RegisterReportServer,
+	),
 )
 
 func (ss *subjectScore) round() (score *subjectScore) {

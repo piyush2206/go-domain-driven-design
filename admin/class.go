@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/piyush2206/go-domain-driven-design/dep"
+	"go.uber.org/fx"
 )
 
 type (
@@ -20,6 +21,17 @@ type (
 	RepositoryClass struct {
 		DB dep.IDb
 	}
+)
+
+// ClassModule is fx module that contains all contructor funcs for class domain
+var ClassModule = fx.Options(
+	fx.Provide(
+		NewClassRepository,
+		NewClassService,
+	),
+	fx.Invoke(
+		RegisterClassServer,
+	),
 )
 
 // NewClass initiates a class entity object

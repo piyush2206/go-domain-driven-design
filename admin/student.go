@@ -2,6 +2,7 @@ package admin
 
 import (
 	"github.com/piyush2206/go-domain-driven-design/dep"
+	"go.uber.org/fx"
 )
 
 type (
@@ -15,6 +16,17 @@ type (
 	RepositoryStudent struct {
 		DB dep.IDb
 	}
+)
+
+// StudentModule is fx module that contains all contructor funcs for student domain
+var StudentModule = fx.Options(
+	fx.Provide(
+		NewStudentRepository,
+		NewStudentService,
+	),
+	fx.Invoke(
+		RegisterStudentServer,
+	),
 )
 
 // NewStudentRepository initiates class repository with required external dependencies

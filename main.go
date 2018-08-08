@@ -5,42 +5,24 @@ import (
 	"github.com/piyush2206/go-domain-driven-design/dep"
 	"github.com/piyush2206/go-domain-driven-design/report"
 	"go.uber.org/fx"
-	"google.golang.org/grpc"
 )
 
 func main() {
-	go startGRPCGateway()
-
+	// fx.New creates a new fx app that can be handled with fx.lifecycle methods
 	app := fx.New(
-		fx.Provide(
-			// external dependencies initialisation functions
-			dep.NewMySQLConn,
+		// external dependencies constructor functions
+		dep.FxModule,
 
-			// GRPC server initialisation
-			grpc.NewServer,
+		// group of all admin contructor and register functions
+		admin.FxModule,
 
-			// Class domain initialisation
-			admin.NewClassRepository,
-			admin.NewClassService,
+		// group of all report contructor and register functions
+		report.FxModule,
 
-			// Student domain initialisation
-			admin.NewStudentRepository,
-			admin.NewStudentService,
-
-			// Report domain initialisation
-			report.NewReportService,
-		),
-
-		fx.Invoke(
-			// Register GRPC services
-			admin.RegisterClassServer,
-			admin.RegisterStudentServer,
-			report.RegisterReportServer,
-
-			// Start GRPC Server
-			runGRPC,
-		),
+		// group of all report contructor and register functions
+		gRPCFxModule,
 	)
 
+	// Run the app continuously untill an error is recived from any 'invoke' functions
 	app.Run()
 }
