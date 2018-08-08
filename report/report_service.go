@@ -9,19 +9,33 @@ import (
 )
 
 type (
-	ReportService struct{}
+	ReportService struct {
+		repoClass   *admin.RepositoryClass
+		repoStudent *admin.RepositoryStudent
+	}
 )
+
+// NewReportService returns a new ReportService object pointer
+func NewReportService(
+	repoClass *admin.RepositoryClass,
+	repoStudent *admin.RepositoryStudent,
+) ReportServer {
+	return &ReportService{
+		repoClass:   repoClass,
+		repoStudent: repoStudent,
+	}
+}
 
 func (rs *ReportService) Report(ctx context.Context, req *ReqReportStudent) (*ResReportStudent, error) {
 	res := new(ResReportStudent)
 	res.Report = make([]*StudentReport, 1)
 
-	cls := admin.RepoClass.Class(req.ClassId)
+	cls := rs.repoClass.Class(req.ClassId)
 	if cls == nil {
 		return nil, errors.New("class not found")
 	}
 
-	stud := admin.RepoStudent.Student(req.StudentId)
+	stud := rs.repoStudent.Student(req.StudentId)
 	if stud == nil {
 		return nil, errors.New("student not found")
 	}

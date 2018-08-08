@@ -2,22 +2,45 @@ package main
 
 import (
 	"github.com/piyush2206/go-domain-driven-design/admin"
-	"github.com/piyush2206/go-domain-driven-design/app"
+	"github.com/piyush2206/go-domain-driven-design/dep"
+	"github.com/piyush2206/go-domain-driven-design/report"
+	"go.uber.org/fx"
+	"google.golang.org/grpc"
 )
 
 func main() {
-	forever := make(chan struct{})
-
-	// Initialize connections to multiple external dependency of the project
-	appCtx, err := app.Init()
-	if err != nil {
-		panic(err)
-	}
-
-	admin.Init(appCtx)
-
-	go startGRPCServer()
 	go startGRPCGateway()
 
-	<-forever
+	app := fx.New(
+		fx.Provide(
+			// external dependencies initialisation functions
+			dep.NewMySQLConn,
+
+			// GRPC server initialisation
+			grpc.NewServer,
+
+			// Class domain initialisation
+			admin.NewClassRepository,
+			admin.NewClassService,
+
+			// Student domain initialisation
+			admin.NewStudentRepository,
+			admin.NewStudentService,
+
+			// Report domain initialisation
+			report.NewReportService,
+		),
+
+		fx.Invoke(
+			// StartGRPCServer
+			runGRPC,
+
+			// Register GRPC services
+			admin.RegisterClassServer,
+			admin.RegisterStudentServer,
+			report.RegisterReportServer,
+		),
+	)
+
+	app.Run()
 }

@@ -1,0 +1,18 @@
+language: go
+sudo: false
+
+go_import_path: go.uber.org/fx
+go:
+  - "1.9"
+  - "1.10"
+  - tip
+
+cache:
+  directories:
+    - vendor
+
+install:
+  - make dependencies
+
+script:
+  - make ci

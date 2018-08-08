@@ -52,3 +52,11 @@
 [prune]
   go-tests = true
   unused-packages = true
+
+[[constraint]]
+  name = "github.com/uber-go/fx"
+  version = "1.6.0"
+
+[[constraint]]
+  name = "go.uber.org/fx"
+  version = "1.6.0"

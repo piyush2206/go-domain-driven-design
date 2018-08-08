@@ -19,20 +19,11 @@ const (
 	httpPort = "8080"
 )
 
-func startGRPCServer() {
+func runGRPC(s *grpc.Server) {
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", grpcPort))
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
-
-	s := grpc.NewServer()
-
-	// registering admin grpc servers
-	admin.RegisterClassServer(s, new(admin.ClassService))
-	admin.RegisterStudentServer(s, new(admin.StudentService))
-
-	// registering report grpc servers
-	report.RegisterReportServer(s, new(report.ReportService))
 
 	// Register reflection service on gRPC server.
 	reflection.Register(s)
@@ -41,7 +32,7 @@ func startGRPCServer() {
 	}
 }
 
-func startGRPCGateway() error {
+func startGRPCGateway() (*string, error) {
 	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
@@ -58,9 +49,9 @@ func startGRPCGateway() error {
 		report.RegisterReportHandlerFromEndpoint,
 	} {
 		if err := f(ctx, mux, grpcAddr, opts); err != nil {
-			return err
+			return nil, err
 		}
 	}
 
-	return http.ListenAndServe(fmt.Sprintf(":%s", httpPort), mux)
+	return nil, http.ListenAndServe(fmt.Sprintf(":%s", httpPort), mux)
 }

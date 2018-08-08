@@ -7,11 +7,20 @@ import (
 )
 
 type (
-	StudentService struct{}
+	StudentService struct {
+		repoStudent *RepositoryStudent
+	}
 )
 
+// NewStudentService returns a new empty object of StudentService
+func NewStudentService(repoStudent *RepositoryStudent) StudentServer {
+	return &StudentService{repoStudent: repoStudent}
+}
+
+// Student rpc of Student service returns requested student data from student ID
 func (ss *StudentService) Student(ctx context.Context, req *ReqStudent) (*ResStudent, error) {
-	stud, _ := SampleStudents[req.StudentId]
+	stud := ss.repoStudent.Student(req.StudentId)
+
 	resStud := &ResStudent{
 		Student: &StudentInfo{
 			Name: fmt.Sprintf("%s %s", stud.FName, stud.LName),

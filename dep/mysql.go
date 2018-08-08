@@ -1,4 +1,4 @@
-package app
+package dep
 
 import (
 	"database/sql"
@@ -39,7 +39,7 @@ type (
 	}
 )
 
-func initMySQL() (IDb, error) {
+func NewMySQLConn() (IDb, error) {
 	dbSession, err := sql.Open(database, fmt.Sprintf("%s:%s@%s(%s:%s)/%s",
 		dbUser, dbPass, dbConnectProtocol, dbHost, dbPort, dbName))
 	if err != nil {

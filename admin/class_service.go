@@ -9,9 +9,15 @@ import (
 type (
 	// ClassService implements class service interface of grpc
 	ClassService struct {
-		err error
+		err       error
+		RepoClass *RepositoryClass
 	}
 )
+
+// NewClassService returns a new empty object of ClassService
+func NewClassService(RepoClass *RepositoryClass) ClassServer {
+	return &ClassService{RepoClass: RepoClass}
+}
 
 // Class is the handler of grpc endpoint 'Class'
 // It returns class info of the requested classId
@@ -43,14 +49,18 @@ func (cs *ClassService) Create(ctx context.Context, req *ReqClassCreate) (*ResSu
 	res := new(ResSuccess)
 	class := new(Class)
 
-	class.New(req)
+	class, err := NewClass(req)
+	if err != nil {
+		return nil, err
+	}
 	defer cs.formResponse(res)
 
-	cs.err = RepoClass.Create(class)
+	cs.err = cs.RepoClass.Create(class)
 
 	return res, nil
 }
 
+// formResponse creates the response of create
 func (cs *ClassService) formResponse(res *ResSuccess) {
 	if cs.err != nil {
 		res.Success = false
