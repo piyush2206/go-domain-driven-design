@@ -21,7 +21,7 @@ Dependency Injection (DI) is the process of supplying a resource that a given pi
 
 [Domain Driven Design in Go: Part 3](http://www.citerus.se/part-3-domain-driven-design-in-go)
 
-[PDF eBook]- (https://github.com/p0w34007/ebooks/blob/master/Eric%20Evans%202003%20-%20Domain-Driven%20Design%20-%20Tackling%20Complexity%20in%20the%20Heart%20of%20Software.pdf) Eric Evans 2003 - Domain-Driven Design - Tackling Complexity in the Heart of Software  
+[PDF eBook](https://github.com/p0w34007/ebooks/blob/master/Eric%20Evans%202003%20-%20Domain-Driven%20Design%20-%20Tackling%20Complexity%20in%20the%20Heart%20of%20Software.pdf) : Eric Evans 2003 - Domain-Driven Design - Tackling Complexity in the Heart of Software  
 ### Packages used
 Dependency Injection - [fx](https://github.com/uber-go/fx)
 
