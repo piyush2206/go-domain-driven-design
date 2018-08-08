@@ -32,13 +32,13 @@ func main() {
 		),
 
 		fx.Invoke(
-			// StartGRPCServer
-			runGRPC,
-
 			// Register GRPC services
 			admin.RegisterClassServer,
 			admin.RegisterStudentServer,
 			report.RegisterReportServer,
+
+			// Start GRPC Server
+			runGRPC,
 		),
 	)
 
