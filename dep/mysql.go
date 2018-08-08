@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	_ "github.com/go-sql-driver/mysql"
-	"go.uber.org/fx"
 )
 
 const (
@@ -38,12 +37,6 @@ type (
 	rows struct {
 		rows *sql.Rows
 	}
-)
-
-var FxModule = fx.Options(
-	fx.Provide(
-		NewMySQLConn,
-	),
 )
 
 func NewMySQLConn() (IDb, error) {
